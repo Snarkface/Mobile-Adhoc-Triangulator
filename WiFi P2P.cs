@@ -78,9 +78,10 @@ namespace Mobile_Adhoc_Triangulator
 
     public class WiFiDirectBroadcastReceiver : BroadcastReceiver
     {
-        WifiP2pManager mManager;
-        WifiP2pManager.Channel mChannel;
+        private WifiP2pManager mManager;
+        private WifiP2pManager.Channel mChannel;
         private WiFiDirectActivity activity;
+        private PeerListListener peerListListener;
 
         public WiFiDirectBroadcastReceiver(WifiP2pManager mManager, WifiP2pManager.Channel mChannel, WiFiDirectActivity activity) : base()
         {
@@ -109,8 +110,14 @@ namespace Mobile_Adhoc_Triangulator
             else if (WifiP2pManager.WifiP2pPeersChangedAction.Equals(action))
             {
 
-                // The peer list has changed! We should probably do something about
-                // that.
+                // Request available peers from the wifi p2p manager. This is an
+                // asynchronous call and the calling activity is notified with a
+                // callback on PeerListListener.onPeersAvailable()
+                if (mManager != null)
+                {
+                    mManager.RequestPeers(mChannel, peerListListener);
+                }
+                Log.Debug("WiFiDirectActivity", "P2P peers changed");
 
             }
             else if (WifiP2pManager.WifiP2pConnectionChangedAction.Equals(action))
@@ -130,9 +137,8 @@ namespace Mobile_Adhoc_Triangulator
                 */
             }
         }
-    }
 
-    public class PeerListListner : Java.Lang.Object, WifiP2pManager.IPeerListListener
+    public class PeerListListener : Java.Lang.Object, WifiP2pManager.IPeerListListener
     {
 
         private List<WifiP2pDevice> peers = new List<WifiP2pDevice>();
