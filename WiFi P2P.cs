@@ -9,38 +9,153 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+
+
 using Android.Net.Wifi.P2p;
+using Android.Util;
 
 namespace Mobile_Adhoc_Triangulator
 {
-    /**
-    * A BroadcastReceiver that notifies of important Wi-Fi p2p events.
-    */
-    public class WiFiDirectBroadcastReceiver : BroadcastReceiver
+    public class WiFiDirectActivity : Activity
     {
 
-    public override void OnReceive(Context context, Intent intent)
-    {
-        String action = intent.Action;
+        WiFiDirectBroadcastReceiver receiver;
+        WifiP2pManager mManager;
+        WifiP2pManager.Channel mChannel;
+        bool isWifiP2pEnabled;
+        //PeerListListner peerListListener;
 
-        if (WifiP2pManager.WifiP2pConnectionChangedAction.Equals(action))
+        private IntentFilter intentFilter = new IntentFilter();
+        public new void OnCreate(Bundle savedInstanceState)
         {
-            // Check to see if Wi-Fi is enabled and notify appropriate activity
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.Main);
+
+            // Indicates a change in the Wi-Fi P2P status.
+            intentFilter.AddAction(WifiP2pManager.WifiP2pStateChangedAction);
+
+            // Indicates a change in the list of available peers.
+            intentFilter.AddAction(WifiP2pManager.WifiP2pPeersChangedAction);
+
+            // Indicates the state of Wi-Fi P2P connectivity has changed.
+            intentFilter.AddAction(WifiP2pManager.WifiP2pConnectionChangedAction);
+
+            // Indicates this device's details have changed.
+            intentFilter.AddAction(WifiP2pManager.WifiP2pThisDeviceChangedAction);
+
+            mManager = (WifiP2pManager) GetSystemService(Context.WifiP2pService);
+            mChannel = mManager.Initialize(this, MainLooper, null);
         }
-        else if (WifiP2pManager.WifiP2pPeersChangedAction.Equals(action))
+
+        public new void OnResume()
         {
-            // Call WifiP2pManager.requestPeers() to get a list of current peers
+            base.OnResume();
+            receiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+            RegisterReceiver(receiver, intentFilter);
         }
-        else if (WifiP2pManager.WifiP2pConnectionChangedAction.Equals(action))
+
+        public new void OnPause()
         {
-            // Respond to new connection or disconnections
+            base.OnPause();
+            UnregisterReceiver(receiver);
         }
-        else if (WifiP2pManager.WifiP2pThisDeviceChangedAction.Equals(action))
+
+        private void RegisterReceiver(WiFiDirectBroadcastReceiver receiver, IntentFilter intentFilter)
         {
-            // Respond to this device's wifi state changing
+            // Need to Register Receiver
+        }
+
+        private void UnregisterReceiver(WiFiDirectBroadcastReceiver receiver, IntentFilter intentFilter)
+        {
+            // Need to Unregister Receiver
+        }
+
+        public void SetIsWifiP2pEnabled(bool isWifiP2pEnabled)
+        {
+            this.isWifiP2pEnabled = isWifiP2pEnabled;
         }
     }
-}
 
+    public class WiFiDirectBroadcastReceiver : BroadcastReceiver
+    {
+        WifiP2pManager mManager;
+        WifiP2pManager.Channel mChannel;
+        private WiFiDirectActivity activity;
 
+        public WiFiDirectBroadcastReceiver(WifiP2pManager mManager, WifiP2pManager.Channel mChannel, WiFiDirectActivity activity) : base()
+        {
+            this.mManager = mManager;
+            this.mChannel = mChannel;
+            this.activity = activity;
+        }
+
+        public override void OnReceive(Context context, Intent intent)
+        {
+            String action = intent.Action;
+            if (WifiP2pManager.WifiP2pStateChangedAction.Equals(action))
+            {
+                // Determine if Wifi P2P mode is enabled or not, alert
+                // the Activity.
+                int state = intent.GetIntExtra(WifiP2pManager.ExtraWifiState, -1);
+                if (state == int.Parse(WifiP2pManager.WifiP2pStateEnabled.ToString()))
+                {
+                    activity.SetIsWifiP2pEnabled(true);
+                }
+                else
+                {
+                    activity.SetIsWifiP2pEnabled(false);
+                }
+            }
+            else if (WifiP2pManager.WifiP2pPeersChangedAction.Equals(action))
+            {
+
+                // The peer list has changed! We should probably do something about
+                // that.
+
+            }
+            else if (WifiP2pManager.WifiP2pConnectionChangedAction.Equals(action))
+            {
+
+                // Connection state changed! We should probably do something about
+                // that.
+
+            }
+            else if (WifiP2pManager.WifiP2pThisDeviceChangedAction.Equals(action))
+            {
+                /*
+                DeviceListFragment fragment = (DeviceListFragment)activity.getFragmentManager()
+                        .findFragmentById(R.id.frag_list);
+                fragment.updateThisDevice((WifiP2pDevice)intent.getParcelableExtra(
+                        WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+                */
+            }
+        }
+    }
+
+    public class PeerListListner : Java.Lang.Object, WifiP2pManager.IPeerListListener
+    {
+
+        private List<WifiP2pDevice> peers = new List<WifiP2pDevice>();
+
+        public void OnPeersAvailable(WifiP2pDeviceList peerList)
+        {
+
+            List<WifiP2pDevice> refreshedPeers = (List<WifiP2pDevice>)peerList.DeviceList;
+            if (!refreshedPeers.Equals(peers))
+            {
+                peers.Clear();
+                peers.AddRange(refreshedPeers);
+
+                // Perform any other updates needed based on the new list of
+                // peers connected to the Wi-Fi P2P network.
+            }
+
+            if (peers.Count == 0)
+            {
+                Log.Debug("WiFiDirectActivity", "No devices found");
+                return;
+            }
+
+        }
+    }
 }
