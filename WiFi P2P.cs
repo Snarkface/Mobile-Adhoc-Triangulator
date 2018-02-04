@@ -18,14 +18,12 @@ namespace Mobile_Adhoc_Triangulator
 {
     public class WiFiDirectActivity : Activity
     {
-
-        WiFiDirectBroadcastReceiver receiver;
-        WifiP2pManager mManager;
-        WifiP2pManager.Channel mChannel;
-        bool isWifiP2pEnabled;
-        //PeerListListner peerListListener;
-
         private IntentFilter intentFilter = new IntentFilter();
+        private WiFiDirectBroadcastReceiver receiver;
+        private WifiP2pManager mManager;
+        private WifiP2pManager.Channel mChannel;
+        bool isWifiP2pEnabled;
+
         public new void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -88,6 +86,7 @@ namespace Mobile_Adhoc_Triangulator
             this.mManager = mManager;
             this.mChannel = mChannel;
             this.activity = activity;
+            mManager.DiscoverPeers(mChannel, new WifiDirectActionListener());
         }
 
         public override void OnReceive(Context context, Intent intent)
@@ -138,9 +137,11 @@ namespace Mobile_Adhoc_Triangulator
             }
         }
 
+
+    }
+
     public class PeerListListener : Java.Lang.Object, WifiP2pManager.IPeerListListener
     {
-
         private List<WifiP2pDevice> peers = new List<WifiP2pDevice>();
 
         public void OnPeersAvailable(WifiP2pDeviceList peerList)
@@ -162,6 +163,19 @@ namespace Mobile_Adhoc_Triangulator
                 return;
             }
 
+        }
+    }
+
+    public class WifiDirectActionListener : Java.Lang.Object, WifiP2pManager.IActionListener
+    {
+        public void OnFailure(WifiP2pFailureReason failureReason)
+        {
+            // To Implement
+        }
+
+        public void OnSuccess()
+        {
+            // To Implement
         }
     }
 }
