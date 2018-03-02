@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
+using Android.Net.Wifi.P2p;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-
-using Android.Net.Wifi.P2p;
-using Android.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mobile_Adhoc_Triangulator
 {
@@ -132,48 +127,45 @@ namespace Mobile_Adhoc_Triangulator
             //view.SetText(GetDeviceStatus(device.Status));
         }
 
-    public void OnPeersAvailable(WifiP2pDeviceList peerList)
-    {
-        if (progressDialog != null && progressDialog.IsShowing)
+        public void OnPeersAvailable(WifiP2pDeviceList peerList)
         {
-            progressDialog.Dismiss();
-        }
-        peers.Clear();
-        peers.AddRange(peerList.DeviceList);
-        ((WiFiPeerListAdapter)ListAdapter).NotifyDataSetChanged();
-        if (peers.Count == 0)
-        {
-            Log.Debug(WiFiDirectActivity.TAG, "No devices found");
-            return;
-        }
-    }
-    public void ClearPeers()
-    {
-        peers.Clear();
-        ((WiFiPeerListAdapter)ListAdapter).NotifyDataSetChanged();
-    }
-    /**
-     * 
-     */
-    public void onInitiateDiscovery()
-    {
-        if (progressDialog != null && progressDialog.IsShowing)
-        {
-            progressDialog.Dismiss();
-        }
-        progressDialog = ProgressDialog.Show(Activity, "Press back to cancel", "finding peers", true,
-            true, new DialogInterfaceOnCancelListener());
-    }
-
-        private class DialogInterfaceOnCancelListener : DialogInterface, IDialogInterfaceOnCancelListener
-        {
-            public DialogInterfaceOnCancelListener() : base
+            if (progressDialog != null && progressDialog.IsShowing)
             {
+                progressDialog.Dismiss();
             }
+            peers.Clear();
+            peers.AddRange(peerList.DeviceList);
+            ((WiFiPeerListAdapter)ListAdapter).NotifyDataSetChanged();
+            if (peers.Count == 0)
+            {
+                //Log.Debug(WiFiDirectActivity.TAG, "No devices found");
+                return;
+            }
+        }
 
+        public void ClearPeers()
+        {
+            peers.Clear();
+            ((WiFiPeerListAdapter)this.ListAdapter).NotifyDataSetChanged();
+        }
+
+        /**
+         * 
+         */
+        public void OnInitiateDiscovery()
+        {
+            if (progressDialog != null && progressDialog.IsShowing)
+            {
+                progressDialog.Dismiss();
+            }
+            progressDialog = ProgressDialog.Show(this.Activity, "Press back to cancel", "finding peers", true,
+                true, new DialogInterfaceOnCancelListener());
+        }
+
+        private class DialogInterfaceOnCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
+        {
             public void OnCancel(IDialogInterface dialog)
             {
-                //throw new NotImplementedException();
             }
         }
 
@@ -188,4 +180,5 @@ namespace Mobile_Adhoc_Triangulator
             void Connect(WifiP2pConfig config);
             void Disconnect();
         }
+    }
 }
