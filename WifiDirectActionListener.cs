@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Android.Net.Wifi.P2p;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 
 namespace Mobile_Adhoc_Triangulator
 {
-    class WifiDirectActionListener
+    public class WifiDirectActionListener : Java.Lang.Object, WifiP2pManager.IActionListener
     {
+        public void OnFailure(WifiP2pFailureReason failureReason)
+        {
+            // To Implement
+        }
+
+        public void OnSuccess()
+        {
+            // To Implement
+        }
     }
 }
