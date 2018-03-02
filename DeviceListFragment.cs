@@ -24,13 +24,13 @@ namespace Mobile_Adhoc_Triangulator
         public override void OnActivityCreated(Bundle savedInstanceState)
         {
             base.OnActivityCreated(savedInstanceState);
-            //this.SetListAdapter(new WiFiPeerListAdapter(this.Activity, R.layout.row_devices, peers));
+            //this.SetListAdapter(new WiFiPeerListAdapter(Activity, Resource.layout.row_devices, peers));
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            //mContentView = inflater.Inflate(R.layout.device_list, null);
-            return this.mContentView;
+            //mContentView = inflater.Inflate(Resource.layout.device_list, null);
+            return mContentView;
         }
 
         /**
@@ -38,7 +38,7 @@ namespace Mobile_Adhoc_Triangulator
          */
         public WifiP2pDevice GetDevice()
         {
-            return this.device;
+            return device;
         }
 
         private static String GetDeviceStatus(WifiP2pDeviceState deviceStatus)
@@ -66,8 +66,8 @@ namespace Mobile_Adhoc_Triangulator
          */
         public override void OnListItemClick(ListView l, View v, int position, long id)
         {
-            WifiP2pDevice device = (WifiP2pDevice)this.ListAdapter.GetItem(position);
-            ((IDeviceActionListener)this.Activity).ShowDetails(device);
+            WifiP2pDevice device = (WifiP2pDevice)ListAdapter.GetItem(position);
+            ((IDeviceActionListener)Activity).ShowDetails(device);
         }
 
         /*
@@ -95,15 +95,15 @@ namespace Mobile_Adhoc_Triangulator
                 View v = convertView;
                 if (v == null)
                 {
-                    LayoutInflater vi = (LayoutInflater)this.Activity.GetSystemService(
+                    LayoutInflater vi = (LayoutInflater)Activity.GetSystemService(
                             Context.LayoutInflaterService);
-                    //v = vi.Inflate(R.layout.row_devices, null);
+                    //v = vi.Inflate(Resource.layout.row_devices, null);
                 }
                 WifiP2pDevice device = items.ElementAt(position);
                 /*if (device != null)
                 {
-                    TextView top = (TextView)v.FindViewById(R.id.device_name);
-                    TextView bottom = (TextView)v.FindViewById(R.id.device_details);
+                    TextView top = (TextView)v.FindViewById(Resource.id.device_name);
+                    TextView bottom = (TextView)v.FindViewById(Resource.id.device_details);
                     if (top != null)
                     {
                         top.SetText(device.DeviceName);
@@ -125,9 +125,9 @@ namespace Mobile_Adhoc_Triangulator
         public void UpdateThisDevice(WifiP2pDevice device)
         {
             this.device = device;
-            //TextView view = (TextView)mContentView.FindViewById(R.id.my_name);
+            //TextView view = (TextView)mContentView.FindViewById(Resource.id.my_name);
             //view.SetText(device.DeviceName);
-            //view = (TextView)mContentView.FindViewById(R.id.my_status);
+            //view = (TextView)mContentView.FindViewById(Resource.id.my_status);
             //view.SetText(GetDeviceStatus(device.Status));
         }
 
@@ -150,7 +150,7 @@ namespace Mobile_Adhoc_Triangulator
         public void ClearPeers()
         {
             peers.Clear();
-            ((WiFiPeerListAdapter)this.ListAdapter).NotifyDataSetChanged();
+            ((WiFiPeerListAdapter)ListAdapter).NotifyDataSetChanged();
         }
 
         /**
@@ -162,7 +162,7 @@ namespace Mobile_Adhoc_Triangulator
             {
                 progressDialog.Dismiss();
             }
-            progressDialog = ProgressDialog.Show(this.Activity, "Press back to cancel", "finding peers", true,
+            progressDialog = ProgressDialog.Show(Activity, "Press back to cancel", "finding peers", true,
                 true, new DialogInterfaceOnCancelListener());
         }
 

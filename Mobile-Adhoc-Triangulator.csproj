@@ -54,6 +54,7 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceDetailFragment.cs" />
     <Compile Include="DeviceListFragment.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="PeerListListener.cs" />
