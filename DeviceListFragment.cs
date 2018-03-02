@@ -10,6 +10,10 @@ using System.Linq;
 
 namespace Mobile_Adhoc_Triangulator
 {
+    /*
+    * A ListFragment that displays available peers on discovery and requests the
+    * parent activity to handle user interaction events
+    */
     public class DeviceListFragment : ListFragment, WifiP2pManager.IPeerListListener
     {
         private List<WifiP2pDevice> peers = new List<WifiP2pDevice>();
