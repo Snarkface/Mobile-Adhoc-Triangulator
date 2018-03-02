@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+using static Mobile_Adhoc_Triangulator.DeviceListFragment;
+using Android.Net;
+using Android.Net.Wifi;
 using Android.Net.Wifi.P2p;
 using Android.Util;
+using Java.Lang;
 using Java.IO;
-using Android.Net.Wifi;
-using static Mobile_Adhoc_Triangulator.DeviceListFragment;
+using Java.Net;
+using System.IO.IsolatedStorage;
 
 namespace Mobile_Adhoc_Triangulator
 {
@@ -134,12 +133,7 @@ namespace Mobile_Adhoc_Triangulator
             view = (TextView)mContentView.FindViewById(R.id.status_text);
             view.SetText(R.string.empty);
             mContentView.FindViewById(R.id.btn_start_client).setVisibility(ViewStates.Gone);*/
-            ((View)GetView()).Visibility = ViewStates.Gone;
-        }
-
-        private object GetView()
-        {
-            throw new NotImplementedException();
+            View.Visibility = ViewStates.Gone;
         }
 
         private class ViewOnClickListnerConnect : Java.Lang.Object, View.IOnClickListener
@@ -157,8 +151,10 @@ namespace Mobile_Adhoc_Triangulator
 
             public void OnClick(View v)
             {
-                WifiP2pConfig config = new WifiP2pConfig();
-                config.DeviceAddress = device.DeviceAddress;
+                WifiP2pConfig config = new WifiP2pConfig
+                {
+                    DeviceAddress = device.DeviceAddress
+                };
                 config.Wps.Setup = WpsInfo.Pbc;
                 if (progressDialog != null && progressDialog.IsShowing)
                 {
@@ -192,5 +188,86 @@ namespace Mobile_Adhoc_Triangulator
                 ((IDeviceActionListener)Activity).Disconnect();
             }
         }
-    }
+
+        public class FileServerAsyncTask : AsyncTask
+        {
+            private Context context;
+            private TextView statusText;
+
+            /**
+             * @param context
+             * @param statusText
+             */
+            public FileServerAsyncTask(Context context, View statusText)
+            {
+                this.context = context;
+                this.statusText = (TextView)statusText;
+            }
+
+            protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
+            {
+                try
+                {
+                    ServerSocket serverSocket = new ServerSocket(8988);
+                    //Log.Debug(WiFiDirectActivity.TAG, "Server: Socket opened");
+                    Socket client = serverSocket.Accept();
+                    //Log.Debug(WiFiDirectActivity.TAG, "Server: connection done");
+                    File f = new File(Environment.ExternalStorageDirectory + "/"
+                            + context.PackageName + "/wifip2pshared-" + JavaSystem.CurrentTimeMillis()
+                            + ".jpg");
+                    File dirs = new File(f.Parent);
+                    if (!dirs.Exists())
+                        dirs.Mkdirs();
+                    f.CreateNewFile();
+                    //Log.Debug(WiFiDirectActivity.TAG, "server: copying files " + f.ToString());
+                    InputStream inputstream = (InputStream)(System.Object)client.InputStream;
+                    CopyFile(inputstream, new FileOutputStream(f));
+                    serverSocket.Close();
+                    return f.AbsolutePath;
+                }
+                catch (IOException e)
+                {
+                    //Log.Debug(WiFiDirectActivity.TAG, e.Message);
+                    return null;
+                }
+            }
+
+            /*
+             * (non-Javadoc)
+             * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+             */
+            protected override void OnPostExecute(Java.Lang.Object result)
+            {
+                if (result != null)
+                {
+                    statusText.Text = "File copied - " + result;
+                    Intent intent = new Intent();
+                    intent.SetAction(Android.Content.Intent.ActionView);
+                    intent.SetDataAndType(Uri.Parse("file://" + result), "image/*");
+                    context.StartActivity(intent);
+                }
+            }
+        }
+
+        public static bool CopyFile(InputStream inputStream, OutputStream outp)
+        {
+            byte[] buf = new byte[1024];
+            int len;
+            try
+            {
+                while ((len = inputStream.Read(buf)) != -1)
+                {
+                outp.Write(buf, 0, len);
+                }
+            outp.Close();
+                inputStream.Close();
+            }
+            catch (IOException e)
+            {
+                //Log.Debug(WiFiDirectActivity.TAG, e.ToString());
+                return false;
+            }
+            return true;
+        }
+    }  
 }
