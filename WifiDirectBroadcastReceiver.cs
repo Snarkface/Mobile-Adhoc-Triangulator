@@ -18,7 +18,7 @@ namespace Mobile_Adhoc_Triangulator
             this.mManager = mManager;
             this.mChannel = mChannel;
             this.activity = activity;
-            mManager.DiscoverPeers(mChannel, new WifiDirectActionListener());
+            mManager.DiscoverPeers(mChannel, new WiFiDirectActionListener());
         }
 
         public override void OnReceive(Context context, Intent intent)

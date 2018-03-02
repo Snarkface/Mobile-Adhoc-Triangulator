@@ -3,7 +3,7 @@
 
 namespace Mobile_Adhoc_Triangulator
 {
-    public class WifiDirectActionListener : Java.Lang.Object, WifiP2pManager.IActionListener
+    public class WiFiDirectActionListener : Java.Lang.Object, WifiP2pManager.IActionListener
     {
         public void OnFailure(WifiP2pFailureReason failureReason)
         {
