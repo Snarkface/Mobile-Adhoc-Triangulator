@@ -7,7 +7,7 @@ namespace Mobile_Adhoc_Triangulator
     [Activity(Label = "Mobile_Adhoc_Triangulator", MainLauncher = true, Icon = "@mipmap/icon")]
     public class MainActivity : Activity
     {
-        int count = 1;
+        //int count = 1;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
