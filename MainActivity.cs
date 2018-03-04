@@ -11,7 +11,7 @@ namespace Mobile_Adhoc_Triangulator
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
+            /*base.OnCreate(savedInstanceState);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
@@ -20,7 +20,7 @@ namespace Mobile_Adhoc_Triangulator
             // and attach an event to it
             Button button = FindViewById<Button>(Resource.Id.myButton);
 
-            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };*/
         }
     }
 }

@@ -41,11 +41,137 @@ namespace Mobile_Adhoc_Triangulator
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f050001
+			public const int layout_border_color = 2131034113;
+			
+			// aapt resource value: 0x7f050000
+			public const int status_bar_color = 2131034112;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
+		public partial class Dimension
+		{
+			
+			// aapt resource value: 0x7f060001
+			public const int phone_list_height = 2131099649;
+			
+			// aapt resource value: 0x7f060000
+			public const int tablet_list_width = 2131099648;
+			
+			static Dimension()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Dimension()
+			{
+			}
+		}
+		
+		public partial class Drawable
+		{
+			
+			// aapt resource value: 0x7f020000
+			public const int details_view = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int ic_action_discover = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int ic_action_on_off = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int ic_launcher = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int icon = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int machine = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int section_header = 2130837510;
+			
+			static Drawable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Drawable()
+			{
+			}
+		}
+		
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int myButton = 2131034112;
+			// aapt resource value: 0x7f090012
+			public const int atn_direct_discover = 2131296274;
+			
+			// aapt resource value: 0x7f090011
+			public const int atn_direct_enable = 2131296273;
+			
+			// aapt resource value: 0x7f090000
+			public const int btn_connect = 2131296256;
+			
+			// aapt resource value: 0x7f090001
+			public const int btn_disconnect = 2131296257;
+			
+			// aapt resource value: 0x7f090002
+			public const int btn_start_client = 2131296258;
+			
+			// aapt resource value: 0x7f090003
+			public const int device_address = 2131296259;
+			
+			// aapt resource value: 0x7f090010
+			public const int device_details = 2131296272;
+			
+			// aapt resource value: 0x7f090004
+			public const int device_info = 2131296260;
+			
+			// aapt resource value: 0x7f09000f
+			public const int device_name = 2131296271;
+			
+			// aapt resource value: 0x7f09000e
+			public const int frag_detail = 2131296270;
+			
+			// aapt resource value: 0x7f09000d
+			public const int frag_list = 2131296269;
+			
+			// aapt resource value: 0x7f090006
+			public const int group_ip = 2131296262;
+			
+			// aapt resource value: 0x7f090005
+			public const int group_owner = 2131296261;
+			
+			// aapt resource value: 0x7f090009
+			public const int icon = 2131296265;
+			
+			// aapt resource value: 0x7f09000c
+			public const int linearLayout1 = 2131296268;
+			
+			// aapt resource value: 0x7f09000a
+			public const int my_name = 2131296266;
+			
+			// aapt resource value: 0x7f09000b
+			public const int my_status = 2131296267;
+			
+			// aapt resource value: 0x7f090007
+			public const int status_bar = 2131296263;
+			
+			// aapt resource value: 0x7f090008
+			public const int status_text = 2131296264;
 			
 			static Id()
 			{
@@ -60,8 +186,17 @@ namespace Mobile_Adhoc_Triangulator
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			// aapt resource value: 0x7f040000
+			public const int device_detail = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int device_list = 2130968577;
+			
+			// aapt resource value: 0x7f040002
+			public const int Main = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public const int row_devices = 2130968579;
 			
 			static Layout()
 			{
@@ -73,11 +208,27 @@ namespace Mobile_Adhoc_Triangulator
 			}
 		}
 		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f080000
+			public const int action_items = 2131230720;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
+			{
+			}
+		}
+		
 		public partial class Mipmap
 		{
 			
-			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			// aapt resource value: 0x7f030000
+			public const int Icon = 2130903040;
 			
 			static Mipmap()
 			{
@@ -92,11 +243,50 @@ namespace Mobile_Adhoc_Triangulator
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int app_name = 2130968577;
+			// aapt resource value: 0x7f070000
+			public const int app_name = 2131165184;
 			
-			// aapt resource value: 0x7f040000
-			public const int hello = 2130968576;
+			// aapt resource value: 0x7f070009
+			public const int client_text = 2131165193;
+			
+			// aapt resource value: 0x7f070003
+			public const int connect_peer_button = 2131165187;
+			
+			// aapt resource value: 0x7f070004
+			public const int disconnect_peer_button = 2131165188;
+			
+			// aapt resource value: 0x7f070002
+			public const int discover_peers_button = 2131165186;
+			
+			// aapt resource value: 0x7f070006
+			public const int empty = 2131165190;
+			
+			// aapt resource value: 0x7f07000a
+			public const int empty_message = 2131165194;
+			
+			// aapt resource value: 0x7f070001
+			public const int enable_p2p_button = 2131165185;
+			
+			// aapt resource value: 0x7f070005
+			public const int get_file_button = 2131165189;
+			
+			// aapt resource value: 0x7f07000c
+			public const int group_owner_text = 2131165196;
+			
+			// aapt resource value: 0x7f07000d
+			public const int label_me = 2131165197;
+			
+			// aapt resource value: 0x7f07000e
+			public const int label_peers = 2131165198;
+			
+			// aapt resource value: 0x7f070008
+			public const int no = 2131165192;
+			
+			// aapt resource value: 0x7f07000b
+			public const int p2p_off_warning = 2131165195;
+			
+			// aapt resource value: 0x7f070007
+			public const int yes = 2131165191;
 			
 			static String()
 			{
