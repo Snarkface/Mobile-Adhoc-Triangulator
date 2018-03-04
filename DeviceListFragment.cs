@@ -10,10 +10,10 @@ using System.Linq;
 
 namespace Mobile_Adhoc_Triangulator
 {
-    /*
-    * A ListFragment that displays available peers on discovery and requests the
-    * parent activity to handle user interaction events
-    */
+    /**
+     * A ListFragment that displays available peers on discovery and requests the
+     * parent activity to handle user interaction events
+     */
     public class DeviceListFragment : ListFragment, WifiP2pManager.IPeerListListener
     {
         private List<WifiP2pDevice> peers = new List<WifiP2pDevice>();
@@ -24,12 +24,12 @@ namespace Mobile_Adhoc_Triangulator
         public override void OnActivityCreated(Bundle savedInstanceState)
         {
             base.OnActivityCreated(savedInstanceState);
-            //this.SetListAdapter(new WiFiPeerListAdapter(Activity, Resource.layout.row_devices, peers));
+            ListAdapter = new WiFiPeerListAdapter(Context, Resource.Layout.row_devices, peers, Activity);
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            //mContentView = inflater.Inflate(Resource.layout.device_list, null);
+            mContentView = inflater.Inflate(Resource.Layout.device_list, null);
             return mContentView;
         }
 
@@ -61,7 +61,7 @@ namespace Mobile_Adhoc_Triangulator
             }
         }
 
-        /*
+        /**
          * Initiate a connection with the peer.
          */
         public override void OnListItemClick(ListView l, View v, int position, long id)
@@ -70,15 +70,15 @@ namespace Mobile_Adhoc_Triangulator
             ((IDeviceActionListener)Activity).ShowDetails(device);
         }
 
-        /*
+        /**
          * Array adapter for ListFragment that maintains WifiP2pDevice list.
          */
         private class WiFiPeerListAdapter : ArrayAdapter<WifiP2pDevice>
         {
             private List<WifiP2pDevice> items;
-            Activity Activity;
+            private Activity Activity;
 
-            /*
+            /**
              * @param context
              * @param textViewResourceId
              * @param objects
@@ -97,38 +97,38 @@ namespace Mobile_Adhoc_Triangulator
                 {
                     LayoutInflater vi = (LayoutInflater)Activity.GetSystemService(
                             Context.LayoutInflaterService);
-                    //v = vi.Inflate(Resource.layout.row_devices, null);
+                    v = vi.Inflate(Resource.Layout.row_devices, null);
                 }
                 WifiP2pDevice device = items.ElementAt(position);
-                /*if (device != null)
+                if (device != null)
                 {
-                    TextView top = (TextView)v.FindViewById(Resource.id.device_name);
-                    TextView bottom = (TextView)v.FindViewById(Resource.id.device_details);
+                    TextView top = (TextView)v.FindViewById(Resource.Id.device_name);
+                    TextView bottom = (TextView)v.FindViewById(Resource.Id.device_details);
                     if (top != null)
                     {
-                        top.SetText(device.DeviceName);
+                        top.Text = device.DeviceName;
                     }
                     if (bottom != null)
                     {
-                        bottom.SetText(GetDeviceStatus(device.Status));
+                        bottom.Text = GetDeviceStatus(device.Status);
                     }
-                }*/
+                }
                 return v;
             }
         }
 
         /**
          * Update UI for this device.
-         * 
+         *
          * @param device WifiP2pDevice object
          */
         public void UpdateThisDevice(WifiP2pDevice device)
         {
             this.device = device;
-            //TextView view = (TextView)mContentView.FindViewById(Resource.id.my_name);
-            //view.SetText(device.DeviceName);
-            //view = (TextView)mContentView.FindViewById(Resource.id.my_status);
-            //view.SetText(GetDeviceStatus(device.Status));
+            TextView view = (TextView)mContentView.FindViewById(Resource.Id.my_name);
+            view.Text = device.DeviceName;
+            view = (TextView)mContentView.FindViewById(Resource.Id.my_status);
+            view.Text = GetDeviceStatus(device.Status);
         }
 
         public void OnPeersAvailable(WifiP2pDeviceList peerList)
@@ -154,7 +154,7 @@ namespace Mobile_Adhoc_Triangulator
         }
 
         /**
-         * 
+         *
          */
         public void OnInitiateDiscovery()
         {
@@ -180,7 +180,7 @@ namespace Mobile_Adhoc_Triangulator
         public interface IDeviceActionListener
         {
             void ShowDetails(WifiP2pDevice device);
-            void SancelDisconnect();
+            void CancelDisconnect();
             void Connect(WifiP2pConfig config);
             void Disconnect();
         }

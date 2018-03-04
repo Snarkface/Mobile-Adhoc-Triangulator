@@ -32,9 +32,9 @@ namespace Mobile_Adhoc_Triangulator
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            //mContentView = inflater.Inflate(Resource.layout.device_detail, null);
-            //mContentView.FindViewById(R.id.btn_connect).SetOnClickListener(new ViewOnClickListnerConnect(Activity, device, progressDialog));
-            //mContentView.FindViewById(R.id.btn_disconnect).SetOnClickListener(new ViewOnClickListnerDisconnect(Activity));
+            mContentView = inflater.Inflate(Resource.Layout.device_detail, null);
+            mContentView.FindViewById(Resource.Id.btn_connect).SetOnClickListener(new ViewOnClickListnerConnect(Activity, device, progressDialog));
+            mContentView.FindViewById(Resource.Id.btn_disconnect).SetOnClickListener(new ViewOnClickListnerDisconnect(Activity));
             /*mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -55,8 +55,8 @@ namespace Mobile_Adhoc_Triangulator
             // User has picked an image. Transfer it to group owner i.e peer using
             // FileTransferService.
             Android.Net.Uri uri = data.Data;
-            //TextView statusText = (TextView)mContentView.FindViewById(R.id.status_text);
-            //statusText.Text = "Sending: " + uri;
+            TextView statusText = (TextView)mContentView.FindViewById(Resource.Id.status_text);
+            statusText.Text = "Sending: " + uri;
             //Log.Debug(WiFiDirectActivity.TAG, "Intent----------- " + uri);
             /*Intent serviceIntent = new Intent(this.Activity, FileTransferService.class);
                 serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
@@ -76,10 +76,10 @@ namespace Mobile_Adhoc_Triangulator
             this.info = info;
             this.View.Visibility = ViewStates.Visible;
             // The owner IP is now known.
-            /*TextView view = (TextView)mContentView.FindViewById(R.id.group_owner);
-            view.Text = this.Resources.GetString(R.string.group_owner_text)
-                    + ((info.IsGroupOwner == true) ? Resources.GetString(R.string.yes)
-                            : this.Resources.GetString(R.string.no)));
+            TextView view = (TextView)mContentView.FindViewById(Resource.Id.group_owner);
+            /*view.Text = this.Resources.GetString(Resource.String.group_owner_text)
+                    + ((info.IsGroupOwner == true) ? Resources.GetString(Resource.String.yes)
+                            : this.Resources.GetString(Resource.String.no)));
             InetAddress from WifiP2pInfo struct.
             view = (TextView)mContentView.FindViewById(R.id.device_info);
             view.Text = "Group Owner IP - " + info.GroupOwnerAddress.HostAddress);
@@ -98,9 +98,9 @@ namespace Mobile_Adhoc_Triangulator
                 mContentView.FindViewById(R.id.btn_start_client).setVisibility(ViewStates.Visible);
                 ((TextView)mContentView.FindViewById(R.id.status_text)).setText(this.Resources
                         .GetString(R.string.client_text));
-            }
+            }*/
             // hide the connect button
-            mContentView.FindViewById(R.id.btn_connect).setVisibility(ViewStates.Gone);*/
+            mContentView.FindViewById(Resource.Id.btn_connect).Visibility = ViewStates.Gone;
         }
 
         /**
@@ -112,10 +112,10 @@ namespace Mobile_Adhoc_Triangulator
         {
             this.device = device;
             View.Visibility = (ViewStates.Visible);
-            //TextView view = (TextView)mContentView.FindViewById(R.id.device_address);
-            //view.Text = device.DeviceAddress;
-            //view = (TextView)mContentView.FindViewById(R.id.device_info);
-            //view.Text = device.ToString();
+            TextView view = (TextView)mContentView.FindViewById(Resource.Id.device_address);
+            view.Text = device.DeviceAddress;
+            view = (TextView)mContentView.FindViewById(Resource.Id.device_info);
+            view.Text = device.ToString();
         }
 
         /**
@@ -123,16 +123,16 @@ namespace Mobile_Adhoc_Triangulator
          */
         public void ResetViews()
         {
-            /*mContentView.FindViewById(R.id.btn_connect).setVisibility(ViewStates.Visible);
-            TextView view = (TextView)mContentView.FindViewById(R.id.device_address);
-            view.SetText(R.string.empty);
-            view = (TextView)mContentView.FindViewById(R.id.device_info);
-            view.SetText(R.string.empty);
-            view = (TextView)mContentView.FindViewById(R.id.group_owner);
-            view.SetText(R.string.empty);
-            view = (TextView)mContentView.FindViewById(R.id.status_text);
-            view.SetText(R.string.empty);
-            mContentView.FindViewById(R.id.btn_start_client).setVisibility(ViewStates.Gone);*/
+            mContentView.FindViewById(Resource.Id.btn_connect).Visibility = ViewStates.Visible;
+            TextView view = (TextView)mContentView.FindViewById(Resource.Id.device_address);
+            view.SetText(Resource.String.empty);
+            view = (TextView)mContentView.FindViewById(Resource.Id.device_info);
+            view.SetText(Resource.String.empty);
+            view = (TextView)mContentView.FindViewById(Resource.Id.group_owner);
+            view.SetText(Resource.String.empty);
+            view = (TextView)mContentView.FindViewById(Resource.Id.status_text);
+            view.SetText(Resource.String.empty);
+            mContentView.FindViewById(Resource.Id.btn_start_client).Visibility = ViewStates.Gone;
             View.Visibility = ViewStates.Gone;
         }
 
@@ -189,6 +189,10 @@ namespace Mobile_Adhoc_Triangulator
             }
         }
 
+        /**
+         *  Temporary example of implemantation
+         *  Will be reimplemnted in clean C#
+         */
         public class FileServerAsyncTask : AsyncTask
         {
             private Context context;
