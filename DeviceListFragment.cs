@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Net.Wifi.P2p;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -41,10 +42,10 @@ namespace Mobile_Adhoc_Triangulator
             return device;
         }
 
-        private static String GetDeviceStatus(int deviceStatus)
+        private static String GetDeviceStatus(WifiP2pDeviceState deviceStatus)
         {
-            //Log.Debug(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
-            switch ((WifiP2pDeviceState)deviceStatus)
+            Log.Debug(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
+            switch (deviceStatus)
             {
                 case WifiP2pDeviceState.Available:
                     return "Available";
@@ -142,7 +143,7 @@ namespace Mobile_Adhoc_Triangulator
             ((WiFiPeerListAdapter)ListAdapter).NotifyDataSetChanged();
             if (peers.Count == 0)
             {
-                //Log.Debug(WiFiDirectActivity.TAG, "No devices found");
+                Log.Debug(WiFiDirectActivity.TAG, "No devices found");
                 return;
             }
         }

@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-
+﻿using Android.Content;
 using Android.Net;
 using Android.Net.Wifi.P2p;
 using Android.Util;
+using System;
 
 namespace Mobile_Adhoc_Triangulator
 {
     /**
      * A BroadcastReceiver that notifies of important wifi p2p events.
      */
+    [BroadcastReceiver]
     public class WiFiDirectBroadcastReceiver : BroadcastReceiver
     {
         private WifiP2pManager manager;
         private WifiP2pManager.Channel channel;
         private WiFiDirectActivity activity;
+
         /**
          * @param manager WifiP2pManager system service
          * @param channel Wifi p2p channel
@@ -51,12 +43,12 @@ namespace Mobile_Adhoc_Triangulator
                 if ((WifiP2pState)state == WifiP2pState.Enabled)
                 {
                     // Wifi Direct mode is enabled
-                    activity.setIsWifiP2pEnabled(true);
+                    activity.SetIsWifiP2pEnabled(true);
                 }
                 else
                 {
-                    activity.setIsWifiP2pEnabled(false);
-                    activity.resetData();
+                    activity.SetIsWifiP2pEnabled(false);
+                    activity.ResetData();
                 }
                 Log.Debug(WiFiDirectActivity.TAG, "P2P state changed - " + state);
             }
@@ -85,19 +77,19 @@ namespace Mobile_Adhoc_Triangulator
                     // we are connected with the other device, request connection
                     // info to find group owner IP
                     DeviceDetailFragment fragment = (DeviceDetailFragment)activity
-                            .getFragmentManager().findFragmentById(Resource.Id.frag_detail);
+                            .FragmentManager.FindFragmentById(Resource.Id.frag_detail);
                     manager.RequestConnectionInfo(channel, fragment);
                 }
                 else
                 {
                     // It's a disconnect
-                    activity.resetData();
+                    activity.ResetData();
                 }
             }
             else if (WifiP2pManager.WifiP2pThisDeviceChangedAction.Equals(action))
             {
-                DeviceListFragment fragment = (DeviceListFragment)activity.getFragmentManager()
-                        .findFragmentById(Resource.Id.frag_list);
+                DeviceListFragment fragment = (DeviceListFragment)activity.FragmentManager
+                        .FindFragmentById(Resource.Id.frag_list);
                 fragment.UpdateThisDevice((WifiP2pDevice)intent.GetParcelableExtra(
                         WifiP2pManager.ExtraWifiP2pDevice));
             }

@@ -5,7 +5,6 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-using static Mobile_Adhoc_Triangulator.DeviceListFragment;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Net.Wifi.P2p;
@@ -57,7 +56,7 @@ namespace Mobile_Adhoc_Triangulator
             Android.Net.Uri uri = data.Data;
             TextView statusText = (TextView)mContentView.FindViewById(Resource.Id.status_text);
             statusText.Text = "Sending: " + uri;
-            //Log.Debug(WiFiDirectActivity.TAG, "Intent----------- " + uri);
+            Log.Debug(WiFiDirectActivity.TAG, "Intent----------- " + uri);
             /*Intent serviceIntent = new Intent(this.Activity, FileTransferService.class);
                 serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
                 serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
@@ -170,7 +169,7 @@ namespace Mobile_Adhoc_Triangulator
                         //                            }
                         //                        }
                         );
-                ((IDeviceActionListener)Activity).Connect(config);
+                ((DeviceListFragment.IDeviceActionListener)Activity).Connect(config);
             }
         }
 
@@ -185,7 +184,7 @@ namespace Mobile_Adhoc_Triangulator
 
             public void OnClick(View v)
             {
-                ((IDeviceActionListener)Activity).Disconnect();
+                ((DeviceListFragment.IDeviceActionListener)Activity).Disconnect();
             }
         }
 
@@ -213,9 +212,9 @@ namespace Mobile_Adhoc_Triangulator
                 try
                 {
                     ServerSocket serverSocket = new ServerSocket(8988);
-                    //Log.Debug(WiFiDirectActivity.TAG, "Server: Socket opened");
+                    Log.Debug(WiFiDirectActivity.TAG, "Server: Socket opened");
                     Socket client = serverSocket.Accept();
-                    //Log.Debug(WiFiDirectActivity.TAG, "Server: connection done");
+                    Log.Debug(WiFiDirectActivity.TAG, "Server: connection done");
                     File f = new File(Environment.ExternalStorageDirectory + "/"
                             + context.PackageName + "/wifip2pshared-" + JavaSystem.CurrentTimeMillis()
                             + ".jpg");
@@ -223,7 +222,7 @@ namespace Mobile_Adhoc_Triangulator
                     if (!dirs.Exists())
                         dirs.Mkdirs();
                     f.CreateNewFile();
-                    //Log.Debug(WiFiDirectActivity.TAG, "server: copying files " + f.ToString());
+                    Log.Debug(WiFiDirectActivity.TAG, "server: copying files " + f.ToString());
                     InputStream inputstream = (InputStream)(System.Object)client.InputStream;
                     CopyFile(inputstream, new FileOutputStream(f));
                     serverSocket.Close();
@@ -231,7 +230,7 @@ namespace Mobile_Adhoc_Triangulator
                 }
                 catch (IOException e)
                 {
-                    //Log.Debug(WiFiDirectActivity.TAG, e.Message);
+                    Log.Debug(WiFiDirectActivity.TAG, e.Message);
                     return null;
                 }
             }
@@ -268,7 +267,7 @@ namespace Mobile_Adhoc_Triangulator
             }
             catch (IOException e)
             {
-                //Log.Debug(WiFiDirectActivity.TAG, e.ToString());
+                Log.Debug(WiFiDirectActivity.TAG, e.ToString());
                 return false;
             }
             return true;
