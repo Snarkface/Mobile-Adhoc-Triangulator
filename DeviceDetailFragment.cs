@@ -1,18 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Net.Wifi.P2p;
+using Android.OS;
 using Android.Util;
-using Java.Lang;
-using Java.IO;
-using Java.Net;
-using System.IO.IsolatedStorage;
+using Android.Views;
+using Android.Widget;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Mobile_Adhoc_Triangulator
 {
@@ -76,7 +72,8 @@ namespace Mobile_Adhoc_Triangulator
             // socket.
             if (info.GroupFormed && info.IsGroupOwner)
             {
-                new FileServerAsyncTask(Activity, mContentView.FindViewById(Resource.Id.status_text)).Execute();
+                TextView statusText = (TextView)mContentView.FindViewById(Resource.Id.status_text);
+                new Task(() => { FileServerAsyncTask(Activity, statusText); }).Start();
             }
             else if (info.GroupFormed)
             {
@@ -198,77 +195,58 @@ namespace Mobile_Adhoc_Triangulator
          *  Temporary example of implemantation
          *  Will be reimplemnted in clean C#
          */
-        public class FileServerAsyncTask : AsyncTask
+        public void FileServerAsyncTask(Context context, TextView statusText)
         {
-            private Context context;
-            private TextView statusText;
-
-            /**
-             * @param context
-             * @param statusText
-             */
-            public FileServerAsyncTask(Context context, View statusText)
+            statusText.Text = "Opening a server socket";
+            string result = null;
+            try
             {
-                this.context = context;
-                this.statusText = (TextView)statusText;
+                LocalServerSocket serverSocket = new LocalServerSocket("8898");
+                Log.Debug(WiFiDirectActivity.TAG, "Server: Socket opened");
+                LocalSocket client = serverSocket.Accept();
+                client.Connect(new LocalSocketAddress(""));
+                Log.Debug(WiFiDirectActivity.TAG, "Server: connection done");
+                FileInfo f = new FileInfo(Environment.ExternalStorageDirectory + "/"
+                        + context.PackageName + "/wifip2pshared-" + Java.Lang.JavaSystem.CurrentTimeMillis()
+                        + ".jpg");
+                DirectoryInfo dirs = f.Directory;
+                if (!dirs.Exists)
+                    dirs.Create();
+                f.Create();
+                Log.Debug(WiFiDirectActivity.TAG, "server: copying files " + f.ToString());
+                Stream inputstream = client.InputStream;
+                CopyFile(inputstream, f.OpenRead());
+                serverSocket.Close();
+                result = f.FullName;
             }
-
-            protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
+            catch (IOException e)
             {
-                try
-                {
-                    ServerSocket serverSocket = new ServerSocket(8988);
-                    Log.Debug(WiFiDirectActivity.TAG, "Server: Socket opened");
-                    Socket client = serverSocket.Accept();
-                    Log.Debug(WiFiDirectActivity.TAG, "Server: connection done");
-                    File f = new File(Environment.ExternalStorageDirectory + "/"
-                            + context.PackageName + "/wifip2pshared-" + JavaSystem.CurrentTimeMillis()
-                            + ".jpg");
-                    File dirs = new File(f.Parent);
-                    if (!dirs.Exists())
-                        dirs.Mkdirs();
-                    f.CreateNewFile();
-                    Log.Debug(WiFiDirectActivity.TAG, "server: copying files " + f.ToString());
-                    InputStream inputstream = (InputStream)(System.Object)client.InputStream;
-                    CopyFile(inputstream, new FileOutputStream(f));
-                    serverSocket.Close();
-                    return f.AbsolutePath;
-                }
-                catch (IOException e)
-                {
-                    Log.Debug(WiFiDirectActivity.TAG, e.Message);
-                    return null;
-                }
+                Log.Debug(WiFiDirectActivity.TAG, e.Message);
             }
-
-            /*
-             * (non-Javadoc)
-             * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-             */
-            protected override void OnPostExecute(Java.Lang.Object result)
+            finally
             {
                 if (result != null)
                 {
                     statusText.Text = "File copied - " + result;
                     Intent intent = new Intent();
-                    intent.SetAction(Android.Content.Intent.ActionView);
+                    intent.SetAction(Intent.ActionView);
                     intent.SetDataAndType(Uri.Parse("file://" + result), "image/*");
                     context.StartActivity(intent);
                 }
             }
         }
 
-        public static bool CopyFile(InputStream inputStream, OutputStream outp)
+        public static bool CopyFile(Stream inputStream, Stream outp)
         {
             byte[] buf = new byte[1024];
             int len;
             try
             {
-                while ((len = inputStream.Read(buf)) != -1)
+                while ((len = inputStream.Read(buf, 0, 1024)) != -1)
                 {
-                outp.Write(buf, 0, len);
+                    outp.Write(buf, 0, len);
                 }
-            outp.Close();
+                outp.Close();
                 inputStream.Close();
             }
             catch (IOException e)
@@ -278,5 +256,5 @@ namespace Mobile_Adhoc_Triangulator
             }
             return true;
         }
-    }  
+    }
 }
