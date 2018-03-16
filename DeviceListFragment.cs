@@ -41,10 +41,10 @@ namespace Mobile_Adhoc_Triangulator
             return device;
         }
 
-        private static String GetDeviceStatus(WifiP2pDeviceState deviceStatus)
+        private static String GetDeviceStatus(int deviceStatus)
         {
             //Log.Debug(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
-            switch (deviceStatus)
+            switch ((WifiP2pDeviceState)deviceStatus)
             {
                 case WifiP2pDeviceState.Available:
                     return "Available";
