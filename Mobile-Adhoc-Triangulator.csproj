@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="DeviceDetailFragment.cs" />
     <Compile Include="DeviceListFragment.cs" />
+    <Compile Include="FileTransferService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
