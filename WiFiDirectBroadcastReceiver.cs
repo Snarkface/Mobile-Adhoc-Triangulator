@@ -59,8 +59,8 @@ namespace Mobile_Adhoc_Triangulator
                 // callback on PeerListListener.onPeersAvailable()
                 if (manager != null)
                 {
-                    manager.RequestPeers(channel, (WifiP2pManager.IPeerListListener)activity.getFragmentManager()
-                            .findFragmentById(Resource.Id.frag_list));
+                    manager.RequestPeers(channel, (WifiP2pManager.IPeerListListener)activity.FragmentManager
+                            .FindFragmentById(Resource.Id.frag_list));
                 }
                 Log.Debug(WiFiDirectActivity.TAG, "P2P peers changed");
             }

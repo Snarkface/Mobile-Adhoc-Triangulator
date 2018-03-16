@@ -67,10 +67,10 @@ namespace Mobile_Adhoc_Triangulator
             TextView view = (TextView)mContentView.FindViewById(Resource.Id.group_owner);
             view.Text = Resources.GetString(Resource.String.group_owner_text)
                     + ((info.IsGroupOwner == true) ? Resources.GetString(Resource.String.yes)
-                            : Resources.GetString(Resource.String.no)));
+                            : Resources.GetString(Resource.String.no));
             // InetAddress from WifiP2pInfo struct.
             view = (TextView)mContentView.FindViewById(Resource.Id.device_info);
-            view.Text = "Group Owner IP - " + info.GroupOwnerAddress.HostAddress);
+            view.Text = "Group Owner IP - " + info.GroupOwnerAddress.HostAddress;
             // After the group negotiation, we assign the group owner as the file
             // server. The file server is single threaded, single connection server
             // socket.
