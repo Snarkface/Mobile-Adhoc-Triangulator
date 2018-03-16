@@ -42,13 +42,13 @@ namespace Mobile_Adhoc_Triangulator
             TextView statusText = (TextView)mContentView.FindViewById(Resource.Id.status_text);
             statusText.Text = "Sending: " + uri;
             Log.Debug(WiFiDirectActivity.TAG, "Intent----------- " + uri);
-            /*Intent serviceIntent = new Intent(this.Activity, FileTransferService.class);
-                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-                serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
-                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-                        info.groupOwnerAddress.getHostAddress());
-                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-                getActivity().startService(serviceIntent);*/
+            Intent serviceIntent = new Intent(this.Activity, typeof(FileTransferService));
+            serviceIntent.SetAction(FileTransferService.ACTION_SEND_FILE);
+            serviceIntent.PutExtra(FileTransferService.EXTRAS_FILE_PATH, uri.ToString());
+            serviceIntent.PutExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
+                        info.GroupOwnerAddress.HostAddress);
+            serviceIntent.PutExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
+            Activity.StartService(serviceIntent);
         }
 
         public void OnConnectionInfoAvailable(WifiP2pInfo info)
