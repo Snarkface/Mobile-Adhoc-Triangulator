@@ -34,18 +34,7 @@ namespace Mobile_Adhoc_Triangulator
             mContentView = inflater.Inflate(Resource.Layout.device_detail, null);
             mContentView.FindViewById(Resource.Id.btn_connect).SetOnClickListener(new ViewOnClickListnerConnect(Activity, device, progressDialog));
             mContentView.FindViewById(Resource.Id.btn_disconnect).SetOnClickListener(new ViewOnClickListnerDisconnect(Activity));
-            /*mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v)
-    {
-        // Allow user to pick an image from Gallery or other
-        // registered apps
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-    }
-});*/
+            mContentView.FindViewById(Resource.Id.btn_start_client).SetOnClickListener(new ViewOnClickListnerImage(Activity));
             return mContentView;
         }
 
@@ -76,28 +65,26 @@ namespace Mobile_Adhoc_Triangulator
             this.View.Visibility = ViewStates.Visible;
             // The owner IP is now known.
             TextView view = (TextView)mContentView.FindViewById(Resource.Id.group_owner);
-            /*view.Text = this.Resources.GetString(Resource.String.group_owner_text)
+            view.Text = Resources.GetString(Resource.String.group_owner_text)
                     + ((info.IsGroupOwner == true) ? Resources.GetString(Resource.String.yes)
-                            : this.Resources.GetString(Resource.String.no)));
-            InetAddress from WifiP2pInfo struct.
-            view = (TextView)mContentView.FindViewById(R.id.device_info);
+                            : Resources.GetString(Resource.String.no)));
+            // InetAddress from WifiP2pInfo struct.
+            view = (TextView)mContentView.FindViewById(Resource.Id.device_info);
             view.Text = "Group Owner IP - " + info.GroupOwnerAddress.HostAddress);
             // After the group negotiation, we assign the group owner as the file
             // server. The file server is single threaded, single connection server
             // socket.
             if (info.GroupFormed && info.IsGroupOwner)
             {
-                new FileServerAsyncTask(this.Activity, mContentView.FindViewById(R.id.status_text))
-                        .execute();
+                new FileServerAsyncTask(Activity, mContentView.FindViewById(Resource.Id.status_text)).Execute();
             }
             else if (info.GroupFormed)
             {
                 // The other device acts as the client. In this case, we enable the
                 // get file button.
-                mContentView.FindViewById(R.id.btn_start_client).setVisibility(ViewStates.Visible);
-                ((TextView)mContentView.FindViewById(R.id.status_text)).setText(this.Resources
-                        .GetString(R.string.client_text));
-            }*/
+                mContentView.FindViewById(Resource.Id.btn_start_client).Visibility = ViewStates.Visible;
+                ((TextView)mContentView.FindViewById(Resource.Id.status_text)).Text = this.Resources.GetString(Resource.String.client_text);
+            }
             // hide the connect button
             mContentView.FindViewById(Resource.Id.btn_connect).Visibility = ViewStates.Gone;
         }
@@ -137,13 +124,13 @@ namespace Mobile_Adhoc_Triangulator
 
         private class ViewOnClickListnerConnect : Java.Lang.Object, View.IOnClickListener
         {
-            Activity Activity;
+            Activity activity;
             private WifiP2pDevice device;
             private ProgressDialog progressDialog;
 
-            public ViewOnClickListnerConnect(Activity Activity, WifiP2pDevice device, ProgressDialog progressDialog) : base()
+            public ViewOnClickListnerConnect(Activity activity, WifiP2pDevice device, ProgressDialog progressDialog) : base()
             {
-                this.Activity = Activity;
+                this.activity = activity;
                 this.device = device;
                 this.progressDialog = progressDialog;
             }
@@ -159,7 +146,7 @@ namespace Mobile_Adhoc_Triangulator
                 {
                     progressDialog.Dismiss();
                 }
-                progressDialog = ProgressDialog.Show(Activity, "Press back to cancel",
+                progressDialog = ProgressDialog.Show(activity, "Press back to cancel",
                         "Connecting to :" + device.DeviceAddress, true, true
                         //                        new DialogInterface.OnCancelListener() {
                         //
@@ -169,22 +156,41 @@ namespace Mobile_Adhoc_Triangulator
                         //                            }
                         //                        }
                         );
-                ((DeviceListFragment.IDeviceActionListener)Activity).Connect(config);
+                ((DeviceListFragment.IDeviceActionListener)activity).Connect(config);
             }
         }
 
         private class ViewOnClickListnerDisconnect : Java.Lang.Object, View.IOnClickListener
         {
-            Activity Activity;
+            Activity activity;
 
-            public ViewOnClickListnerDisconnect(Activity Activity) : base()
+            public ViewOnClickListnerDisconnect(Activity activity) : base()
             {
-                this.Activity = Activity;
+                this.activity = activity;
             }
 
             public void OnClick(View v)
             {
-                ((DeviceListFragment.IDeviceActionListener)Activity).Disconnect();
+                ((DeviceListFragment.IDeviceActionListener)activity).Disconnect();
+            }
+        }
+
+        private class ViewOnClickListnerImage : Java.Lang.Object, View.IOnClickListener
+        {
+            Activity activity;
+
+            public ViewOnClickListnerImage(Activity activity) : base()
+            {
+                this.activity = activity;
+            }
+
+            public void OnClick(View v)
+            {
+                // Allow user to pick an image from Gallery or other
+                // registered apps
+                Intent intent = new Intent(Intent.ActionGetContent);
+                intent.SetType("image/*");
+                activity.StartActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
             }
         }
 
