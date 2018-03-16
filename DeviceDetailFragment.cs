@@ -121,7 +121,7 @@ namespace Mobile_Adhoc_Triangulator
 
         private class ViewOnClickListnerConnect : Java.Lang.Object, View.IOnClickListener
         {
-            Activity activity;
+            private Activity activity;
             private WifiP2pDevice device;
             private ProgressDialog progressDialog;
 
@@ -159,7 +159,7 @@ namespace Mobile_Adhoc_Triangulator
 
         private class ViewOnClickListnerDisconnect : Java.Lang.Object, View.IOnClickListener
         {
-            Activity activity;
+            private Activity activity;
 
             public ViewOnClickListnerDisconnect(Activity activity) : base()
             {
@@ -174,7 +174,7 @@ namespace Mobile_Adhoc_Triangulator
 
         private class ViewOnClickListnerImage : Java.Lang.Object, View.IOnClickListener
         {
-            Activity activity;
+            private Activity activity;
 
             public ViewOnClickListnerImage(Activity activity) : base()
             {

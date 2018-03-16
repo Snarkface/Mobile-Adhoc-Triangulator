@@ -121,20 +121,7 @@ namespace Mobile_Adhoc_Triangulator
                     DeviceListFragment fragment = (DeviceListFragment)FragmentManager
                             .FindFragmentById(Resource.Id.frag_list);
                     fragment.OnInitiateDiscovery();
-                    /*manager.DiscoverPeers(channel, new WifiP2pManager.ActionListener() {
-                        @Override
-                            public void onSuccess()
-                        {
-                            Toast.makeText(WiFiDirectActivity.this, "Discovery Initiated",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                            public void onFailure(int reasonCode)
-                        {
-                            Toast.makeText(WiFiDirectActivity.this, "Discovery Failed : " + reasonCode,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });*/
+                    manager.DiscoverPeers(channel, new ActionListenerDiscoverPeers(this));
                     return true;
                 default:
                     return base.OnOptionsItemSelected(item);
@@ -150,39 +137,15 @@ namespace Mobile_Adhoc_Triangulator
 
         public void Connect(WifiP2pConfig config)
         {
-            /*manager.Connect(channel, config, new ActionListener() {
-                    @Override
-                    public void onSuccess()
-            {
-                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-            }
-            @Override
-                    public void onFailure(int reason)
-            {
-                Toast.makeText(WiFiDirectActivity.this, "Connect failed. Retry.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });*/
+            manager.Connect(channel, config, new ActionListenerConnect(this));
         }
-
 
         public void Disconnect()
         {
             DeviceDetailFragment fragment = (DeviceDetailFragment)FragmentManager
                     .FindFragmentById(Resource.Id.frag_detail);
             fragment.ResetViews();
-            /*manager.removeGroup(channel, new ActionListener() {
-                    @Override
-                    public void onFailure(int reasonCode)
-            {
-                Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
-            }
-            @Override
-                    public void onSuccess()
-            {
-                fragment.getView().setVisibility(View.GONE);
-            }
-        });*/
+            manager.RemoveGroup(channel, new ActionListenerRemoveGroup(this, fragment));
         }
 
         public void OnChannelDisconnected()
@@ -197,9 +160,7 @@ namespace Mobile_Adhoc_Triangulator
             }
             else
             {
-                Toast.MakeText(this,
-                        "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
-                        ToastLength.Long).Show();
+                Toast.MakeText(this, "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.", ToastLength.Long).Show();
             }
         }
 
@@ -219,25 +180,93 @@ namespace Mobile_Adhoc_Triangulator
                 {
                     Disconnect();
                 }
-                /*
                 else if (fragment.GetDevice().Status == WifiP2pDeviceState.Available
                       || fragment.GetDevice().Status == WifiP2pDeviceState.Invited)
                 {
-                    manager.CancelConnect(channel, new ActionListener() {
-                            @Override
-                            public void onSuccess()
-                    {
-                        Toast.makeText(WiFiDirectActivity.this, "Aborting connection",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                            public void onFailure(int reasonCode)
-                    {
-                        Toast.makeText(WiFiDirectActivity.this,
-                                "Connect abort request failed. Reason Code: " + reasonCode,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+                    manager.CancelConnect(channel, new ActionListenerCancelConnect(this));
+                }
+            }
+        }
+
+        private class ActionListenerDiscoverPeers : Java.Lang.Object, WifiP2pManager.IActionListener
+        {
+            private WiFiDirectActivity activity;
+
+            public ActionListenerDiscoverPeers(WiFiDirectActivity activity) : base()
+            {
+                this.activity = activity;
+            }
+
+            public void OnSuccess()
+            {
+                Toast.MakeText(activity, "Discovery Initiated", ToastLength.Short).Show();
+            }
+
+            public void OnFailure(WifiP2pFailureReason reason)
+            {
+                Toast.MakeText(activity, "Discovery Failed : " + reason, ToastLength.Short).Show();
+            }
+        }
+
+        private class ActionListenerConnect : Java.Lang.Object, WifiP2pManager.IActionListener
+        {
+            private WiFiDirectActivity activity;
+
+            public ActionListenerConnect(WiFiDirectActivity activity) : base()
+            {
+                this.activity = activity;
+            }
+
+            public void OnSuccess()
+            {
+                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+            }
+
+            public void OnFailure(WifiP2pFailureReason reason)
+            {
+                Toast.MakeText(activity, "Connect failed. Retry.", ToastLength.Short).Show();
+            }
+        }
+
+        private class ActionListenerRemoveGroup : Java.Lang.Object, WifiP2pManager.IActionListener
+        {
+            private WiFiDirectActivity activity;
+            private DeviceDetailFragment fragment;
+
+            public ActionListenerRemoveGroup(WiFiDirectActivity activity, DeviceDetailFragment fragment) : base()
+            {
+                this.activity = activity;
+                this.fragment = fragment;
+            }
+
+            public void OnFailure(WifiP2pFailureReason reason)
+            {
+                Log.Debug(TAG, "Disconnect failed. Reason :" + reason);
+            }
+
+            public void OnSuccess()
+            {
+                fragment.View.Visibility = ViewStates.Gone;
+            }
+        }
+
+        private class ActionListenerCancelConnect : Java.Lang.Object, WifiP2pManager.IActionListener
+        {
+            private WiFiDirectActivity activity;
+
+            public ActionListenerCancelConnect(WiFiDirectActivity activity) : base()
+            {
+                this.activity = activity;
+            }
+
+            public void OnSuccess()
+            {
+                Toast.MakeText(activity, "Aborting connection", ToastLength.Short).Show();
+            }
+
+            public void OnFailure(WifiP2pFailureReason reason)
+            {
+                Toast.MakeText(activity, "Connect abort request failed. Reason Code: " + reason, ToastLength.Short).Show();
             }
         }
     }
