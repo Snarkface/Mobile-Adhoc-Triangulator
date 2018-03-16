@@ -5,7 +5,6 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-using static Mobile_Adhoc_Triangulator.DeviceListFragment;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Net.Wifi.P2p;
@@ -170,7 +169,7 @@ namespace Mobile_Adhoc_Triangulator
                         //                            }
                         //                        }
                         );
-                ((IDeviceActionListener)Activity).Connect(config);
+                ((DeviceListFragment.IDeviceActionListener)Activity).Connect(config);
             }
         }
 
@@ -185,7 +184,7 @@ namespace Mobile_Adhoc_Triangulator
 
             public void OnClick(View v)
             {
-                ((IDeviceActionListener)Activity).Disconnect();
+                ((DeviceListFragment.IDeviceActionListener)Activity).Disconnect();
             }
         }
 
