@@ -17,7 +17,7 @@ namespace Mobile_Adhoc_Triangulator
      * The application should also register a BroadcastReceiver for notification of
      * WiFi state related events.
      */
-    [Activity(Label = "WiFiDirectActivity")]
+    [Activity(Label = "WiFiDirectActivity", MainLauncher = true)]
     public class WiFiDirectActivity : Activity, WifiP2pManager.IChannelListener, DeviceListFragment.IDeviceActionListener
     {
         public static readonly String TAG = "wifidirectdemo";
@@ -39,7 +39,7 @@ namespace Mobile_Adhoc_Triangulator
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.Main);
+            SetContentView(Resource.Layout.main);
             // add necessary intent values to be matched.
             intentFilter.AddAction(WifiP2pManager.WifiP2pStateChangedAction);
             intentFilter.AddAction(WifiP2pManager.WifiP2pPeersChangedAction);

@@ -9,7 +9,6 @@ namespace Mobile_Adhoc_Triangulator
     /**
      * A BroadcastReceiver that notifies of important wifi p2p events.
      */
-    [BroadcastReceiver]
     public class WiFiDirectBroadcastReceiver : BroadcastReceiver
     {
         private WifiP2pManager manager;

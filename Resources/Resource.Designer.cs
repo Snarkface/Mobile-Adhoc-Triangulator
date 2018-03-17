@@ -193,7 +193,7 @@ namespace Mobile_Adhoc_Triangulator
 			public const int device_list = 2130968577;
 			
 			// aapt resource value: 0x7f040002
-			public const int Main = 2130968578;
+			public const int main = 2130968578;
 			
 			// aapt resource value: 0x7f040003
 			public const int row_devices = 2130968579;
